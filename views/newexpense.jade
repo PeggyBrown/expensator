@@ -1,0 +1,8 @@
+extends layout
+
+block content
+    h1= title
+    form#formAddExpense(name="addexpense",method="post",action="/addexpense")
+        input#inputExpenseName(type="text", placeholder="expense name", name="expensename")
+        input#inputExpensePrice(type="text", placeholder="expense price", name="expenseprice")
+        button#btnSubmit(type="submit") submit

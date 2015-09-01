@@ -7,9 +7,9 @@ router.get('/', function(req, res, next) {
 });
 
 
-/* GET New User page. */
-router.get('/newuser', function(req, res) {
-    res.render('newuser', { title: 'Add New User' });
+/* GET New Expense page. */
+router.get('/newexpense', function(req, res) {
+    res.render('newexpense', { title: 'Add New Expense' });
 });
 
 /* GET Expenselist page. */
@@ -23,23 +23,23 @@ router.get('/expenses', function(req, res) {
     });
 });
 
-/* POST to Add User Service */
-router.post('/adduser', function(req, res) {
+/* POST to Add Expense Service */
+router.post('/addexpense', function(req, res) {
 
     // Set our internal DB variable
     var db = req.db;
 
     // Get our form values. These rely on the "name" attributes
-    var userName = req.body.username;
-    var userEmail = req.body.useremail;
+    var expenseName = req.body.expensename;
+    var expensePrice = req.body.expenseprice;
 
     // Set our collection
-    var collection = db.get('usercollection');
+    var collection = db.get('expensecollection');
 
     // Submit to the DB
     collection.insert({
-        "username" : userName,
-        "email" : userEmail
+        "name" : expenseName,
+        "price" : expensePrice
     }, function (err, doc) {
         if (err) {
             // If it failed, return error
@@ -47,7 +47,7 @@ router.post('/adduser', function(req, res) {
         }
         else {
             // And forward to success page
-            res.redirect("userlist");
+            res.redirect("expenses");
         }
     });
 });
