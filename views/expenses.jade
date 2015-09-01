@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    h1.
+        Expenses 
+
+    div
+      table
+        thead
+          tr 
+            th Name
+            th Price
+        tbody
+          each expense, i in expenses
+            tr
+              td= expense.name
+              td= expense.price
