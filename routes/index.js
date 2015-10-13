@@ -8,8 +8,8 @@ router.get('/', function(req, res, next) {
 
 
 /* GET New Expense page. */
-router.get('/newexpense', function(req, res) {
-    res.render('newexpense', { title: 'Add New Expense' });
+router.get('/addexpense', function(req, res) {
+    res.render('addexpense', { title: 'Add New Expense' });
 });
 
 /* GET Expenselist page. */
@@ -21,6 +21,18 @@ router.get('/expenses', function(req, res) {
             "expenses" : docs
         });
     });
+});
+
+/* GET Expense details page. */
+router.get('/expense/:id', function(req, res) {
+    var db = req.db;
+    var collection = db.get('expensecollection');
+
+    collection.find({ "_id": req.params.id },{limit:1},function(e,docs){
+        res.render('expense', {
+            'expense' : docs[0]
+        });
+    })
 });
 
 /* POST to Add Expense Service */
