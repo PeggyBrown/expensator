@@ -28,9 +28,9 @@ router.get('/expense/:id', function(req, res) {
     var db = req.db;
     var collection = db.get('expensecollection');
 
-    collection.find({ "_id": req.params.id },{limit:1},function(e,docs){
+    collection.findOne({ '_id': req.params.id },function(e,docs){
         res.render('expense', {
-            'expense' : docs[0]
+            'expense' : docs
         });
     })
 });
