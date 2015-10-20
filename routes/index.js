@@ -23,6 +23,10 @@ router.get('/expenses', function(req, res) {
     });
 });
 
+function presentDetails(id) {
+    window.location.replace('/expense/' + id);
+}
+
 /* GET Expense details page. */
 router.get('/expense/:id', function(req, res) {
     var db = req.db;
