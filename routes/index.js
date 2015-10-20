@@ -23,10 +23,6 @@ router.get('/expenses', function(req, res) {
     });
 });
 
-function presentDetails(id) {
-    window.location.replace('/expense/' + id);
-}
-
 /* GET Expense details page. */
 router.get('/expense/:id', function(req, res) {
     var db = req.db;
@@ -34,6 +30,18 @@ router.get('/expense/:id', function(req, res) {
 
     collection.findOne({ '_id': req.params.id },function(e,docs){
         res.render('expense', {
+            'expense' : docs
+        });
+    })
+});
+
+/* GET Expense edit page. */
+router.get('/expense/edit/:id', function(req, res) {
+    var db = req.db;
+    var collection = db.get('expensecollection');
+
+    collection.findOne({ '_id': req.params.id },function(e,docs){
+        res.render('editexpense', {
             'expense' : docs
         });
     })
@@ -54,6 +62,39 @@ router.post('/addexpense', function(req, res) {
 
     // Submit to the DB
     collection.insert({
+        "name" : expenseName,
+        "price" : expensePrice
+    }, function (err, doc) {
+        if (err) {
+            // If it failed, return error
+            res.send("There was a problem adding the information to the database.");
+        }
+        else {
+            // And forward to success page
+            res.redirect("expenses");
+        }
+    });
+});
+
+/* POST to Edit Expense Service */
+router.post('/updateexpense', function(req, res) {
+
+    // Set our internal DB variable
+    var db = req.db;
+
+    // Get our form values. These rely on the "name" attributes
+    var expenseName = req.body.expensename;
+    var expensePrice = req.body.expenseprice;
+
+    // Set our collection
+    var collection = db.get('expensecollection');
+
+    // Submit to the DB
+    collection.update(
+    {
+        '_id': req.body._id 
+    },
+    {
         "name" : expenseName,
         "price" : expensePrice
     }, function (err, doc) {

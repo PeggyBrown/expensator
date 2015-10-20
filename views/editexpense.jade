@@ -1,8 +1,12 @@
 extends layout
 
 block content
-    h1= title
-    form#formEditExpense(name="editexpense",method="post",action="/editexpense")
-        input#inputExpenseName(type="text", name="expensename")
-        input#inputExpensePrice(type="text", name="expenseprice")
-        button#btnSubmit(type="submit") submit
+    h1 Edit Expense
+    form#formEditExpense(name="editexpense",method="post", action="/updateexpense")
+      input#inputExpenseId(type="hidden", name="_id", value=expense._id)
+      h2 Name
+      input#inputExpenseName(type="text", name="expensename" value=expense.name)
+      h2 Price
+      input#inputExpensePrice(type="text", name="expenseprice" value=expense.price)
+      button#btnSubmit(type="submit") Update
+    a(href="/expenses") << Cancel
