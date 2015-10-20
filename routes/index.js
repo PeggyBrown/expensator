@@ -47,6 +47,24 @@ router.get('/expense/edit/:id', function(req, res) {
     })
 });
 
+/* GET Expense remove page. */
+router.get('/expense/remove/:id', function(req, res) {
+    var db = req.db;
+    var collection = db.get('expensecollection');
+
+    collection.remove({ '_id': req.params.id }, function (err) {
+        if (err) {
+            // If it failed, return error
+            res.send("There was a problem removing expense.");
+        }
+        else {
+            // And forward to success page
+            res.redirect("/expenses");
+        }
+    });
+
+});
+
 /* POST to Add Expense Service */
 router.post('/addexpense', function(req, res) {
 
@@ -100,7 +118,7 @@ router.post('/updateexpense', function(req, res) {
     }, function (err, doc) {
         if (err) {
             // If it failed, return error
-            res.send("There was a problem adding the information to the database.");
+            res.send("There was a problem updating the information in the database.");
         }
         else {
             // And forward to success page
