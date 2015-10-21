@@ -10,11 +10,13 @@ block content
           tr 
             th Name
             th Price
+            th Category
         tbody
           each expense, i in expenses
             tr
               td= expense.name
               td= expense.price
+              td= expense.category
               td 
                 a(href="/expense/" + expense._id) Details
                 a(href="/expense/edit/" + expense._id) Edit

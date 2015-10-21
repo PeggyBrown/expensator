@@ -74,6 +74,7 @@ router.post('/addexpense', function(req, res) {
     // Get our form values. These rely on the "name" attributes
     var expenseName = req.body.expensename;
     var expensePrice = req.body.expenseprice;
+    var expenseCategory = req.body.expensecategory;
 
     // Set our collection
     var collection = db.get('expensecollection');
@@ -81,7 +82,8 @@ router.post('/addexpense', function(req, res) {
     // Submit to the DB
     collection.insert({
         "name" : expenseName,
-        "price" : expensePrice
+        "price" : expensePrice,
+        "category" : expenseCategory
     }, function (err, doc) {
         if (err) {
             // If it failed, return error
@@ -103,6 +105,7 @@ router.post('/updateexpense', function(req, res) {
     // Get our form values. These rely on the "name" attributes
     var expenseName = req.body.expensename;
     var expensePrice = req.body.expenseprice;
+    var expenseCategory = req.body.expensecategory;
 
     // Set our collection
     var collection = db.get('expensecollection');
@@ -114,7 +117,8 @@ router.post('/updateexpense', function(req, res) {
     },
     {
         "name" : expenseName,
-        "price" : expensePrice
+        "price" : expensePrice,
+        "category" : expenseCategory
     }, function (err, doc) {
         if (err) {
             // If it failed, return error
