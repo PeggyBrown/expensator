@@ -13,7 +13,10 @@ var db = monk('localhost:27017/expensator');
 var routes = require('./routes/index');
 var expenses = require('./routes/expenses');
 
+
 var app = express();
+app.locals.moment = require('moment');
+//app.locals.moment = require('./public/javascript/moments');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

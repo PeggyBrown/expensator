@@ -75,6 +75,7 @@ router.post('/addexpense', function(req, res) {
     var expenseName = req.body.expensename;
     var expensePrice = req.body.expenseprice;
     var expenseCategory = req.body.expensecategory;
+    var expenseDate = req.body.expensedate;
 
     // Set our collection
     var collection = db.get('expensecollection');
@@ -83,7 +84,8 @@ router.post('/addexpense', function(req, res) {
     collection.insert({
         "name" : expenseName,
         "price" : expensePrice,
-        "category" : expenseCategory
+        "category" : expenseCategory,
+        "date" : expenseDate
     }, function (err, doc) {
         if (err) {
             // If it failed, return error
@@ -106,6 +108,7 @@ router.post('/updateexpense', function(req, res) {
     var expenseName = req.body.expensename;
     var expensePrice = req.body.expenseprice;
     var expenseCategory = req.body.expensecategory;
+    var expenseDate = req.body.expensedate;
 
     // Set our collection
     var collection = db.get('expensecollection');
@@ -118,7 +121,8 @@ router.post('/updateexpense', function(req, res) {
     {
         "name" : expenseName,
         "price" : expensePrice,
-        "category" : expenseCategory
+        "category" : expenseCategory,
+        "date" : expenseDate
     }, function (err, doc) {
         if (err) {
             // If it failed, return error

@@ -10,5 +10,7 @@ block content
       input#inputExpensePrice(type="text", name="expenseprice" value=expense.price)
       h2 Category
       input#inputExpenseCategory(type="text", name="expensecategory" value=expense.category)
+      h2 Date
+      input#inputDate(type="date", value=expense.date, name="expensedate")
       button#btnSubmit(type="submit") Update
     a(href="/expenses") << Cancel
