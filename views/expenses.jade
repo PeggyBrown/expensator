@@ -3,7 +3,6 @@ extends layout
 block content
     h1.
         Expenses 
-
     div
       table
         thead
@@ -20,8 +19,8 @@ block content
               td= expense.category
               td= expense.date
               td 
-                a(href="/expense/" + expense._id) Details
-                a(href="/expense/edit/" + expense._id) Edit
-                a(href="/expense/remove/" + expense._id) Delete
+                a.btn.btn-success( href="/expense/" + expense._id ) Details
+                a.btn.btn-warning( href="/expense/edit/" + expense._id ) Edit
+                a.btn.btn-danger( href="/expense/remove/" + expense._id ) Delete
 
-    a(href="/addexpense") Add expense
+    a.btn.btn-primary(href="/addexpense") Add expense
