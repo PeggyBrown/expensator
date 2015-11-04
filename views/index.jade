@@ -1,5 +1,6 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  h1 Welcome to #{title}
+  a.btn.btn-success(href="/expenses") Show all expenses
+  a.btn.btn-primary(href="/addexpense") Add expense
