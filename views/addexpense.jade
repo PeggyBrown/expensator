@@ -6,6 +6,6 @@ block content
         input#inputExpenseName(type="text", placeholder="expense name", name="expensename")
         input#inputExpensePrice(type="text", placeholder="expense price", name="expenseprice")
         input#inputExpenseCategory(type="text", placeholder="expense category", name="expensecategory")
-        input#inputDate(type="date", placeholder="#{moment(Date.now()).format('DD/MM/YYYY')}", name="expensedate")
+        input#inputDate(type="text", name="expensedate")
         button.btn.btn-success#btnSubmit(type="submit") submit
     a.btn.btn-primary(href="/expenses") << Cancel
