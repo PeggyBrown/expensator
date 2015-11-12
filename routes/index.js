@@ -16,11 +16,35 @@ router.get('/addexpense', function(req, res) {
 router.get('/expenses', function(req, res) {
     var db = req.db;
     var collection = db.get('expensecollection');
+    
     collection.find({},{},function(e,docs){
         res.render('expenses', {
             "expenses" : docs
         });
     });
+});
+
+/* GET Expenses by caterogies page. */
+router.get('/categories', function(req, res) {
+    var db = req.db;
+    var collection = db.get('expensecollection');
+
+    collection.col.aggregate(
+        [
+            { "$group": { 
+            "_id": "$category", 
+            "sum": { $sum: "$price" } 
+            }}
+        ],
+        function(e,docs) {
+            res.render('categories', {
+                "categories" : docs
+            });
+           
+            
+        }
+    );
+
 });
 
 /* GET Expense details page. */
@@ -39,6 +63,12 @@ router.get('/expense/:id', function(req, res) {
 router.get('/expense/edit/:id', function(req, res) {
     var db = req.db;
     var collection = db.get('expensecollection');
+
+    collection.aggregate(
+    { 
+    $group : {_id : "$hosting", total : { $sum : 1 }}
+    }
+  );
 
     collection.findOne({ '_id': req.params.id },function(e,docs){
         res.render('editexpense', {
@@ -73,7 +103,7 @@ router.post('/addexpense', function(req, res) {
 
     // Get our form values. These rely on the "name" attributes
     var expenseName = req.body.expensename;
-    var expensePrice = req.body.expenseprice;
+    var expensePrice = parseInt(req.body.expenseprice);
     var expenseCategory = req.body.expensecategory;
     var expenseDate = req.body.expensedate;
 
@@ -106,7 +136,7 @@ router.post('/updateexpense', function(req, res) {
 
     // Get our form values. These rely on the "name" attributes
     var expenseName = req.body.expensename;
-    var expensePrice = req.body.expenseprice;
+    var expensePrice = parseInt(req.body.expenseprice);
     var expenseCategory = req.body.expensecategory;
     var expenseDate = req.body.expensedate;
 

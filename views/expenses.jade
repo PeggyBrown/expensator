@@ -4,13 +4,17 @@ block content
     h1.
         Expenses 
     div
-      table
+      table.table.table-hover
+
         thead
           tr 
             th Name
             th Price
             th Category
             th Date
+            th Details
+            th Edit
+            th Delete
         tbody
           each expense, i in expenses
             tr
@@ -18,9 +22,13 @@ block content
               td= expense.price
               td= expense.category
               td= expense.date
-              td 
-                a.btn.btn-success( href="/expense/" + expense._id ) Details
-                a.btn.btn-warning( href="/expense/edit/" + expense._id ) Edit
-                a.btn.btn-danger( href="/expense/remove/" + expense._id ) Delete
+              td: a.btn.btn-success( href="/expense/" + expense._id ) 
+                span.glyphicon.glyphicon-search
+              td: a.btn.btn-warning( href="/expense/edit/" + expense._id )
+                span.glyphicon.glyphicon-pencil
+              td: a.btn.btn-danger( href="/expense/remove/" + expense._id )
+                span.glyphicon.glyphicon-remove
 
     a.btn.btn-primary(href="/addexpense") Add expense
+    a.btn.btn-primary(href="/categories") Show statictics
+
