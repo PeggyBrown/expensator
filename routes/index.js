@@ -9,17 +9,57 @@ router.get('/', function(req, res, next) {
 
 /* GET New Expense page. */
 router.get('/addexpense', function(req, res) {
-    res.render('addexpense', { title: 'Add New Expense' });
+
+var db = req.db;
+    var collection = db.get('expensecollection');
+
+    collection.col.aggregate(
+        [
+            { "$group": { 
+            "_id": "$category"} 
+            }
+        ],
+        function(e,docs) {
+            console.log(docs)
+            res.render('addexpense', {
+                title: 'Add New Entry',
+                "categories" : docs
+            });
+        }
+    );
 });
 
 /* GET Expenselist page. */
 router.get('/expenses', function(req, res) {
     var db = req.db;
     var collection = db.get('expensecollection');
-    
+
+    var category = []
+    var price = []
+
     collection.find({},{},function(e,docs){
+    var _ = require("underscore");
+    
+    function sum(numbers) {
+        return _.reduce(numbers, function(result, current) {
+            return result + parseFloat(current);
+        }, 0);
+    }
+    var result = _.chain(docs)
+        .groupBy("category")
+        .map(function(value, key) {
+            return {
+                name: key,
+                sum: sum(_.pluck(value, "price"))
+            }
+        })
+        .value();
+
+    console.log(result);
+
         res.render('expenses', {
-            "expenses" : docs
+            "expenses" : docs,
+            "categories" : result
         });
     });
 });
@@ -40,11 +80,8 @@ router.get('/categories', function(req, res) {
             res.render('categories', {
                 "categories" : docs
             });
-           
-            
         }
     );
-
 });
 
 /* GET Expense details page. */

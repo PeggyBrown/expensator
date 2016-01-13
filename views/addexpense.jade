@@ -3,9 +3,11 @@ extends layout
 block content
     h1= title
     form#formAddExpense(name="addexpense",method="post",action="/addexpense")
-        input#inputExpenseName(type="text", placeholder="expense name", name="expensename")
+        input.form-control#inputExpenseName(type="text", placeholder="expense name", name="expensename")
         input#inputExpensePrice(type="text", placeholder="expense price", name="expenseprice")
-        input#inputExpenseCategory(type="text", placeholder="expense category", name="expensecategory")
-        input#inputDate(type="text", name="expensedate")
-        button.btn.btn-success#btnSubmit(type="submit") submit
+        select#inputExpenseCategory(name="expensecategory")
+          for category in categories
+            option(value=category._id) #{category._id}
+        input#inputDate(type="text", placeholder="expense date", name="expensedate")
+        button.btn.btn-success#btnSubmit(type="submit") Submit
     a.btn.btn-primary(href="/expenses") Cancel
