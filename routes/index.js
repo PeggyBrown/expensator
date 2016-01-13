@@ -16,8 +16,8 @@ var db = req.db;
     collection.col.aggregate(
         [
             { "$group": { 
-            "_id": "$category"} 
-            }
+                "_id": "$category"
+            }}
         ],
         function(e,docs) {
             console.log(docs)
@@ -34,10 +34,8 @@ router.get('/expenses', function(req, res) {
     var db = req.db;
     var collection = db.get('expensecollection');
 
-    var category = []
-    var price = []
-
     collection.find({},{},function(e,docs){
+
     var _ = require("underscore");
     
     function sum(numbers) {
@@ -54,8 +52,6 @@ router.get('/expenses', function(req, res) {
             }
         })
         .value();
-
-    console.log(result);
 
         res.render('expenses', {
             "expenses" : docs,
