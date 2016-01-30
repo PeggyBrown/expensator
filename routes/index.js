@@ -13,7 +13,7 @@ router.get('/addexpense', function(req, res) {
     var db = req.db;
     var collection = db.get('categories');
 
-    collection.find({},{_id:0, "name":1},function(e,docs) {
+    collection.find({},{ sort: {"name":1}},function(e,docs) {
         res.render('addexpense', {
             title: 'Add New Entry',
             "categories" : docs
@@ -91,7 +91,8 @@ router.get('/expense/edit/:id', function(req, res) {
     var categories = db.get('categories');
 
     collection.findOne({ '_id': req.params.id },function(e,docs){
-        categories.find({},{_id:0, "name":1},function(e2,cats) {
+        categories.find({}, {sort: {"name":1}},function(e2,cats) {
+            console.log(docs);
             res.render('editexpense', {
                 'expense' : docs,
                 "categories" : cats
