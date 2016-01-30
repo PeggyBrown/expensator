@@ -10,23 +10,15 @@ router.get('/', function(req, res, next) {
 /* GET New Expense page. */
 router.get('/addexpense', function(req, res) {
 
-var db = req.db;
-    var collection = db.get('expensecollection');
+    var db = req.db;
+    var collection = db.get('categories');
 
-    collection.col.aggregate(
-        [
-            { "$group": { 
-                "_id": "$category"
-            }}
-        ],
-        function(e,docs) {
-            console.log(docs)
-            res.render('addexpense', {
-                title: 'Add New Entry',
-                "categories" : docs
-            });
-        }
-    );
+    collection.find({},{_id:0, "name":1},function(e,docs) {
+        res.render('addexpense', {
+            title: 'Add New Entry',
+            "categories" : docs
+        });
+    });
 });
 
 /* GET Expenselist page. */
@@ -96,10 +88,14 @@ router.get('/expense/:id', function(req, res) {
 router.get('/expense/edit/:id', function(req, res) {
     var db = req.db;
     var collection = db.get('expensecollection');
+    var categories = db.get('categories');
 
     collection.findOne({ '_id': req.params.id },function(e,docs){
-        res.render('editexpense', {
-            'expense' : docs
+        categories.find({},{_id:0, "name":1},function(e2,cats) {
+            res.render('editexpense', {
+                'expense' : docs,
+                "categories" : cats
+            });
         });
     })
 });
@@ -172,6 +168,45 @@ router.post('/addexpense', function(req, res) {
                 "type" : "ExpenseAdded",
                 "message": "Added expense " + expenseName + " with price " + expensePrice + 
                         " to category " + expenseCategory + " with id " + doc._id,
+                "date": new Date()
+            });
+        }
+    });
+});
+
+/* POST to Add Category Service */
+router.post('/addcategory', function(req, res) {
+
+    // Set our internal DB variable
+    var db = req.db;
+
+    // Get our form values. These rely on the "name" attributes
+    var categoryName = req.body.categoryname;
+    
+
+    // Set our collection
+    var collection = db.get('categories');
+    var events = db.get('events');
+
+    // Submit to the DB
+    collection.insert({
+        "name" : categoryName
+    }, function (err, doc) {
+        if (err) {
+            // If it failed, return error
+            res.send("There was a problem adding the information to the database.");
+            events.insert({
+                "type" : "CannotAddCategory",
+                "message": err,
+                "date": new Date()
+            });
+        }
+        else {
+            // And forward to success page
+            res.redirect("back");
+            events.insert({
+                "type" : "CategoryAdded",
+                "message": "Added category " + categoryName + " with id " + doc._id,
                 "date": new Date()
             });
         }

@@ -7,7 +7,13 @@ block content
         input#inputExpensePrice(type="text", placeholder="expense price", name="expenseprice")
         select#inputExpenseCategory(name="expensecategory")
           for category in categories
-            option(value=category._id) #{category._id}
+            option(value=category.name) #{category.name}
         input#inputDate(type="text", placeholder="expense date", name="expensedate")
         button.btn.btn-success#btnSubmit(type="submit") Submit
+
+    h2= "New Category"
+    form#formAddCategory(name="addcategory",method="post",action="/addcategory")
+        input.form-control#inputCategoryName(type="text", placeholder="Category name", name="categoryname")
+        button.btn.btn-success#btnAddCategory(type="submit") Add
+
     a.btn.btn-primary(href="/expenses") Cancel
