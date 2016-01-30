@@ -97,12 +97,6 @@ router.get('/expense/edit/:id', function(req, res) {
     var db = req.db;
     var collection = db.get('expensecollection');
 
-    collection.aggregate(
-    { 
-    $group : {_id : "$hosting", total : { $sum : 1 }}
-    }
-  );
-
     collection.findOne({ '_id': req.params.id },function(e,docs){
         res.render('editexpense', {
             'expense' : docs
@@ -114,15 +108,26 @@ router.get('/expense/edit/:id', function(req, res) {
 router.get('/expense/remove/:id', function(req, res) {
     var db = req.db;
     var collection = db.get('expensecollection');
+    var events = db.get('events');
 
     collection.remove({ '_id': req.params.id }, function (err) {
         if (err) {
             // If it failed, return error
             res.send("There was a problem removing expense.");
+            events.insert({
+                "type" : "CannotRemoveExpense",
+                "message": err,
+                "date": new Date()
+            });
         }
         else {
             // And forward to success page
             res.redirect("/expenses");
+            events.insert({
+                "type" : "ExpenseRemoved",
+                "message": "Removed expense with ID " + req.params.id,
+                "date": new Date()
+            });
         }
     });
 
@@ -142,6 +147,7 @@ router.post('/addexpense', function(req, res) {
 
     // Set our collection
     var collection = db.get('expensecollection');
+    var events = db.get('events');
 
     // Submit to the DB
     collection.insert({
@@ -153,10 +159,21 @@ router.post('/addexpense', function(req, res) {
         if (err) {
             // If it failed, return error
             res.send("There was a problem adding the information to the database.");
+            events.insert({
+                "type" : "CannotAddExpense",
+                "message": err,
+                "date": new Date()
+            });
         }
         else {
             // And forward to success page
             res.redirect("expenses");
+            events.insert({
+                "type" : "ExpenseAdded",
+                "message": "Added expense " + expenseName + " with price " + expensePrice + 
+                        " to category " + expenseCategory + " with id " + doc._id,
+                "date": new Date()
+            });
         }
     });
 });
@@ -175,13 +192,12 @@ router.post('/updateexpense', function(req, res) {
 
     // Set our collection
     var collection = db.get('expensecollection');
+    var events = db.get('events');
 
     // Submit to the DB
-    collection.update(
-    {
+    collection.update({
         '_id': req.body._id 
-    },
-    {
+    },{
         "name" : expenseName,
         "price" : expensePrice,
         "category" : expenseCategory,
@@ -190,10 +206,20 @@ router.post('/updateexpense', function(req, res) {
         if (err) {
             // If it failed, return error
             res.send("There was a problem updating the information in the database.");
+            events.insert({
+                "type" : "CannotAddExpense",
+                "message": err,
+                "date": new Date()
+            });
         }
         else {
             // And forward to success page
             res.redirect("expenses");
+            events.insert({
+                "type" : "ExpenseUpdated",
+                "message": "Updated expense with ID "+ req.body._id + ". Name: " + expenseName + ", price: " + expensePrice + ", category: " + expenseCategory,
+                "date": new Date()
+            });
         }
     });
 });
